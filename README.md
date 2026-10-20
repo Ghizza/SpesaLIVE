@@ -1,4 +1,4 @@
-# Spesa LIVE
+# SpesaLIVE
 
 Webapp minimale per calcolare al volo la spesa mentre si fa la spesa. Nessun backend, nessun account: tutto resta sul dispositivo.
 
