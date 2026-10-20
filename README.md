@@ -17,7 +17,7 @@ Apri dal browser del telefono:
 
 **https://ghizza.github.io/SpesaLIVE/**
 
-Non serve installare nulla: la webapp gira direttamente nel browser. I dati vengono salvati automaticamente sul dispositivo e restano lì alla chiusura della pagina.
+La webapp gira direttamente nel browser. I dati vengono salvati automaticamente sul dispositivo e restano lì alla chiusura della pagina.
 
 ## Installazione sul telefono (consigliata)
 
@@ -25,17 +25,6 @@ Installandola come app, si apre a schermo intero senza barra del browser, con un
 
 **iOS (Safari)** — Apri il link → tocca l'icona **Condividi** → **Aggiungi a Home**.  
 **Android (Chrome)** — Apri il link → menu ⋮ → **Installa app** (o **Aggiungi a schermata Home**).
-
-Una volta installata, l'app si apre a schermo intero senza barra del browser, come un'app nativa.
-
-## Uso offline
-
-Dopo la prima apertura (online), la webapp resta disponibile anche senza connessione:
-
-- **Se installata** — apri l'icona dalla home screen: funziona normalmente offline
-- **Se non installata** — il browser può mostrare una versione in cache, ma il comportamento varia; l'installazione è il modo affidabile per usarla offline
-
-I dati restano sul dispositivo e non richiedono rete per essere letti o modificati.
 
 ## Privacy
 
