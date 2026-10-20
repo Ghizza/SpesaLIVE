@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="">
+<link rel="icon" type="image/png" href="spesalive.png">
+<link rel="apple-touch-icon" href="spesalive.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SpesaLIVE">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Spesa LIVE</title>
+<style>
+  :root{
+    --bg:           #E6E4D9;  /* sfondo pagina, testo .delbtn:active */
+    --surface:      #FFFCF0;  /* sfondo card, testo .add:hover/:active */
+    --header:       #F2F0E5;  /* sfondo th e tfoot */
+    --border:       #CECDC3;  /* griglia e bordi */
+    --text:         #100F0F;  /* testo principale */
+    --muted:        #6E6A86;  /* h1 e simbolo € */
+    --accent-light: #C6DDE8;  /* sfondo cella in focus */
+    --accent:       #4385BE;  /* sfondo .add:hover, testo #reset:hover */
+    --accent-dark:  #205EA6;  /* sfondo .add, testo #reset */
+    --active:       #3AA99F;  /* sfondo .add:active */
+    --sub:          #6F6E69;  /* subtotale di riga */
+    --total:        #A02F6F;  /* totale generale */
+    --danger:       #AF3029;  /* testo/attivo pulsante elimina */
+    --shadow:  0px 5px 14px -5px rgba(0, 0, 0, 0.5);
+
+    --fs-huge:   24px;
+    --fs-xlarge: 20px;
+    --fs-large:  18px;
+    --fs-normal: 16px;
+    --fs-small:  14px;
+
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+            "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+
+  html, body{ background:var(--bg); }
+
+  body{
+    margin:0; padding:10px 10px calc(18px + env(safe-area-inset-bottom));
+    font-family: var(--sans);
+    font-size:var(--fs-normal); color:var(--text);
+    -webkit-text-size-adjust:100%;
+    min-height:100vh;
+  }
+  .app{max-width:520px; margin:0 auto;}
+
+  h1{font-size:var(--fs-large); font-weight:600; margin:0 0 10px; text-align:center; color:var(--muted);}
+
+  .card{background:var(--surface); overflow:hidden;
+        box-shadow:var(--shadow);}
+  table{width:100%; border-collapse:collapse; table-layout:fixed;}
+
+  th, td{ border:1px solid var(--border); }
+
+  th{font-size:var(--fs-normal); font-weight:600; color:var(--text);
+     padding:7px 8px; text-align:right; background:var(--header);}
+  th:first-child{text-align:right; padding-left:10px;}
+
+  td{padding:0; vertical-align:middle;}
+
+  th:first-child, td:first-child{ border-left:0; }
+  th:last-child,  td:last-child{  border-right:0; }
+  thead th{ border-top:0; }
+  tfoot td{ border-bottom:0; }
+
+  .cell{display:flex; align-items:center; gap:3px; padding:0 8px; height:42px;}
+
+  .cell:focus-within{
+    background:var(--accent-light);
+  }
+
+  .cur{color:var(--muted); font-size:var(--fs-normal); font-family:var(--mono);}
+
+  input{width:100%; min-width:0; border:0; background:transparent; font:inherit;
+        color:inherit; text-align:right; padding:0; outline:none;
+        font-variant-numeric:tabular-nums;
+        font-family:var(--mono);}
+
+  .sub{padding:0 8px; text-align:right; font-weight:600;
+       font-family:var(--mono); color:var(--sub);}
+
+  .delcell{text-align:center;}
+  .delbtn{width:24px; height:24px; border:0; border-radius:50%; background:transparent;
+          color:var(--danger); font-size:var(--fs-huge); line-height:1; padding:0; cursor:pointer;
+          font-family:var(--sans);}
+  .delbtn:active{background:var(--danger); color:var(--bg);}
+
+  tfoot td{padding:9px 8px; background:var(--header);}
+  .totlabel{text-align:right; font-size:var(--fs-normal); color:var(--text); font-weight:600;
+            font-family:var(--sans);}
+  .totval{text-align:right; font-weight:600; font-size:var(--fs-normal);
+          font-variant-numeric:tabular-nums;
+          font-family:var(--mono); color:var(--total);}
+
+  .add{display:block; width:100%; margin-top:10px; padding:12px; border-radius:12px;
+       border:0; background:var(--accent-dark); color:var(--surface);
+       font:inherit; font-weight:600; cursor:pointer;
+       font-family:var(--sans);}
+  .add:hover{background:var(--accent); color:var(--surface);}
+  .add:active{background:var(--active); color:var(--surface);}
+
+  .foot{text-align:center; margin-top:8px;}
+  #reset{background:none; border:0; color:var(--accent-dark); font-size:var(--fs-small); padding:6px 12px;
+         cursor:pointer; font-family:var(--sans);}
+#reset:hover{color:var(--accent);}
+#reset:active{color:var(--text);}
+</style>
+<script>
+  (function () {
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (v && m) m.setAttribute('content', v);
+  })();
+</script>
+</head>
+<body>
+<div class="app">
+  <h1>SpesaLIVE</h1>
+
+  <div class="card">
+    <table>
+      <colgroup>
+        <col style="width:34%"><col style="width:18%"><col style="width:36%"><col style="width:12%">
+      </colgroup>
+      <thead>
+        <tr><th>Prezzo</th><th>Quantità</th><th>Subtotale</th><th></th></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2" class="totlabel">Totale</td>
+          <td id="total" class="totval">€ 0,00</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <button class="add" id="add" type="button">+ Aggiungi riga</button>
+  <div class="foot"><button id="reset" type="button">Svuota foglio</button></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var tbody   = document.getElementById('tbody');
+  var totalEl = document.getElementById('total');
+  var KEY     = 'calcolo-prezzi-v1';
+
+  var eur = new Intl.NumberFormat('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function fmtMoney(n) { return '€ ' + eur.format(n); }
+
+  function parseNum(str) {
+    if (str == null) return 0;
+    var s = String(str).replace(/[€\s]/g, '');
+    if (s === '') return 0;
+    if (s.indexOf(',') !== -1) s = s.replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(s);
+    return isFinite(n) ? n : 0;
+  }
+
+  function fmtQty(n) {
+    return String(Math.round(n * 1000) / 1000).replace('.', ',');
+  }
+
+  function makeRow(price, qty) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><div class="cell"><span class="cur">€</span>' +
+        '<input class="price" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next"></div></td>' +
+      '<td><div class="cell">' +
+        '<input class="qty" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done"></div></td>' +
+      '<td class="sub">€ 0,00</td>' +
+      '<td class="delcell"><button class="delbtn" type="button" aria-label="Elimina riga">×</button></td>';
+    tr.querySelector('.price').value = price || '';
+    tr.querySelector('.qty').value   = qty   || '';
+    return tr;
+  }
+
+  function recalc() {
+    var total = 0;
+    Array.prototype.forEach.call(tbody.rows, function (tr) {
+      var price  = parseNum(tr.querySelector('.price').value);
+      var qtyRaw = tr.querySelector('.qty').value.trim();
+      var qty    = qtyRaw === '' ? 1 : parseNum(qtyRaw);
+      var sub    = Math.round(price * qty * 100) / 100;
+      tr.querySelector('.sub').textContent = fmtMoney(sub);
+      total += sub;
+    });
+    totalEl.textContent = fmtMoney(Math.round(total * 100) / 100);
+  }
+
+  function save() {
+    var rows = Array.prototype.map.call(tbody.rows, function (tr) {
+      return { p: tr.querySelector('.price').value, q: tr.querySelector('.qty').value };
+    });
+    try { localStorage.setItem(KEY, JSON.stringify(rows)); } catch (e) {}
+  }
+
+  var justFocused = null;
+
+  tbody.addEventListener('focusin', function (e) {
+    var el = e.target;
+    if (!el.matches('input')) return;
+    justFocused = el;
+    setTimeout(function () {
+      if (document.activeElement === el) {
+        el.select();
+        try { el.setSelectionRange(0, el.value.length); } catch (err) {}
+      }
+    }, 0);
+    setTimeout(function () {
+      if (justFocused === el) justFocused = null;
+    }, 400);
+  });
+
+  tbody.addEventListener('mousedown', function (e) {
+    if (e.target === justFocused) e.preventDefault();
+  });
+
+  tbody.addEventListener('input', function (e) {
+    if (e.target.matches('input')) { recalc(); save(); }
+  });
+
+  tbody.addEventListener('focusout', function (e) {
+    var el = e.target;
+    if (el.matches('.price')) {
+      el.value = eur.format(parseNum(el.value));
+    } else if (el.matches('.qty')) {
+      var raw = el.value.trim();
+      el.value = raw === '' ? '1' : fmtQty(parseNum(raw));
+    } else {
+      return;
+    }
+    recalc(); save();
+  });
+
+  tbody.addEventListener('click', function (e) {
+    var btn = e.target.closest('.delbtn');
+    if (!btn) return;
+    btn.closest('tr').remove();
+    if (!tbody.rows.length) tbody.appendChild(makeRow('0,00', '1'));
+    recalc(); save();
+  });
+
+  tbody.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || !e.target.matches('input')) return;
+    e.preventDefault();
+    var inputs = document.querySelectorAll('#tbody input');
+    var i = Array.prototype.indexOf.call(inputs, e.target);
+    if (i > -1 && i < inputs.length - 1) inputs[i + 1].focus();
+    else e.target.blur();
+  });
+
+  document.getElementById('add').addEventListener('click', function () {
+    var tr = makeRow('', '1');
+    tbody.appendChild(tr);
+    recalc(); save();
+    tr.querySelector('.price').focus();
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    if (!confirm('Svuotare il foglio?')) return;
+    tbody.innerHTML = '';
+    tbody.appendChild(makeRow('0,00', '1'));
+    recalc(); save();
+  });
+
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+  if (Array.isArray(saved) && saved.length) {
+    saved.forEach(function (r) { tbody.appendChild(makeRow(r.p, r.q)); });
+  } else {
+    tbody.appendChild(makeRow('0,00', '1'));
+  }
+  recalc();
+})();
+</script>
+</body>
+</html>
