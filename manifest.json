@@ -1,6 +1,6 @@
 {
-  "name": "Spesa LIVE",
-  "short_name": "Spesa LIVE",
+  "name": "SpesaLIVE",
+  "short_name": "SpesaLIVE",
   "description": "Calcola la spesa al volo: prezzo × quantità, subtotale e totale in tempo reale. Funziona offline, nessun account.",
   "lang": "it",
   "dir": "ltr",
